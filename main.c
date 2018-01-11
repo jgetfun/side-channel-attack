@@ -172,12 +172,6 @@ int test() {
 }
 
 int main() {
-    /*
-#if defined(__x86_64__)
-    printf("x86_64\n");
-#else
-    printf("i386\n");
-#endif */
     test();
     return 0;
 }
