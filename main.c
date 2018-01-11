@@ -152,7 +152,7 @@ int cleanup() {
     return 0;
 }
 
-int test() {
+int main() {
     char *name = "Johnny Kuo";
     
     setEev();
@@ -169,9 +169,6 @@ int test() {
     
     cleanup();
     printf("\n");
-}
-
-int main() {
-    test();
+  
     return 0;
 }
