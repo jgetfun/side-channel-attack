@@ -158,6 +158,7 @@ int main() {
         printf("Use 32bits mode to compile me, please!\n");
     #else // i386
         printf("Running...\n");
+    #endif
   
     char *name = "Johnny Kuo";
     
