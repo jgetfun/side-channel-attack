@@ -154,6 +154,11 @@ int cleanup() {
 }
 
 int main() {
+    #if defined(__x86_64__)
+        printf("Use 32bits mode to compile me, please!\n");
+    #else // i386
+        printf("Running...\n");
+  
     char *name = "Johnny Kuo";
     
     setEev();
