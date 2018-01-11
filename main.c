@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <pthread.h>
 #include <string.h>
+#include <stdint.h>
 
 static char *_mem = NULL;
 static char *mem = NULL;
