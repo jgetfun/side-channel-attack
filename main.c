@@ -158,24 +158,24 @@ int main() {
         printf("Use 32bits mode to compile me, please!\n");
     #else // i386
         printf("Running...\n");
+
+        char *name = "Johnny Kuo";
+
+        setEev();
+        int index = 0;
+
+        printf("Expect: %s\n", name);
+        printf("We got: ");
+        while (index < strlen(name)) {
+            int value = read((size_t)(name + index));
+            printf("%c", value);
+            fflush(stdout);
+            index++;
+        }
+
+        cleanup();
+        printf("\n");
     #endif
-  
-    char *name = "Johnny Kuo";
-    
-    setEev();
-    int index = 0;
-    
-    printf("Expect: %s\n", name);
-    printf("We got: ");
-    while (index < strlen(name)) {
-        int value = read((size_t)(name + index));
-        printf("%c", value);
-        fflush(stdout);
-        index++;
-    }
-    
-    cleanup();
-    printf("\n");
   
     return 0;
 }
