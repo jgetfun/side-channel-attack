@@ -5,13 +5,14 @@
 
 #include <asm/cachectl.h>
 
-void _mm_clflush(char *addr) {
+inline void _mm_clflush(char *addr) {
 	cacheflush(addr, sizeof(char), DCACHE);
 }
 
-int __rdtscp(char *addr) {
-	int temp = 0;
-	asm volatile("mfc0 $2, $9" : : "r"(temp));
+inline int __rdtscp(char *addr) {
+	int temp;
+	// asm volatile("mfc0 $2, $9" : : "r"(temp));
+	asm volatile("rdhwr %0， $2 /t/n" : "=r"(temp)); // High-resolution cycle counter.
 	return temp;
 }
 
